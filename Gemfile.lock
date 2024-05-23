@@ -112,6 +112,11 @@ GEM
       concurrent-ruby (~> 1.0)
       zeitwerk (~> 2.6)
     erubi (1.12.0)
+    factory_bot (6.4.6)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.4.3)
+      factory_bot (~> 6.4)
+      railties (>= 5.0.0)
     faker (3.3.1)
       i18n (>= 1.8.11, < 2)
     globalid (1.2.1)
@@ -307,6 +312,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9)
   devise-jwt (~> 0.11.0)
+  factory_bot_rails
   faker (~> 3.3)
   graphiql-rails
   graphql (~> 2.3)
