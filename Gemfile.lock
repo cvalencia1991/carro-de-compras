@@ -134,6 +134,8 @@ GEM
     json (2.7.2)
     json-schema (4.3.0)
       addressable (>= 2.8)
+    jsonapi-serializer (2.2.0)
+      activesupport (>= 4.2)
     jwt (2.8.1)
       base64
     language_server-protocol (3.17.0.3)
@@ -147,7 +149,7 @@ GEM
       net-smtp
     marcel (1.0.4)
     mini_mime (1.1.5)
-    minitest (5.23.0)
+    minitest (5.23.1)
     msgpack (1.7.2)
     mutex_m (0.2.0)
     net-imap (0.4.11)
@@ -216,7 +218,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
-    rdoc (6.6.3.1)
+    rdoc (6.7.0)
       psych (>= 4.0.0)
     regexp_parser (2.9.2)
     reline (0.5.7)
@@ -316,6 +318,7 @@ DEPENDENCIES
   faker (~> 3.3)
   graphiql-rails
   graphql (~> 2.3)
+  jsonapi-serializer
   puma (>= 5.0)
   rack-cors
   rails (~> 7.1.3, >= 7.1.3.3)
