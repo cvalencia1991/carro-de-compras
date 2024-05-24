@@ -26,7 +26,7 @@ class GraphqlController < ApplicationController
     token = request.headers['Authorization'].to_s.split(' ').last
     return nil if token.blank?
 
-    decoded_token = JWT.decode(token, Rails.application.secrets.secret_key_base)
+    decoded_token = JWT.decode(token, Rails.application.credentials.devise_jwt_secret_key)
     User.find(decoded_token[0]['user_id'])
   rescue JWT::DecodeError
     nil
