@@ -30,7 +30,7 @@
 
 
 
-# 📖 [Cart Shop] <a name="about-project"></a>
+# 📖 Cart Shop <a name="about-project"></a>
 
 **Cart Shop** is a API (application Programming interface) that allows the user to create an shop depends of the products
 and the cart items are stablish.
