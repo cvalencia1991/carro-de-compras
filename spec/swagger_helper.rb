@@ -27,10 +27,20 @@ RSpec.configure do |config|
           url: 'https://{defaultHost}',
           variables: {
             defaultHost: {
-              default: 'www.example.com'
+              default: 'localhost:3000'
             }
           }
         }
+      ],
+      securityDefinitions: {
+        bearerAuth: {
+          type: :apiKey,
+          name: 'Authorization',
+          in: :header
+        }
+      },
+      security: [
+        { bearerAuth: [] }
       ]
     }
   }

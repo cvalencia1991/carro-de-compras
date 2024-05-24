@@ -5,6 +5,8 @@ require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
+require 'devise'
+require 'factory_bot_rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -29,6 +31,22 @@ begin
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
+
+
+module DeviseRequestSpecHelpers
+
+  include Warden::Test::Helpers
+
+  def sign_in(user)
+    login_as(user, scope: :user)
+  end
+
+  def sign_out
+    logout(:user)
+  end
+
+end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
@@ -62,4 +80,14 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+
+  config.use_transactional_fixtures = true
+
+  config.infer_spec_type_from_file_location!
+
+  config.filter_rails_from_backtrace!
+  config.include Devise::Test::IntegrationHelpers, type: :controller
+  config.include Warden::Test::Helpers
+  config.include FactoryBot::Syntax::Methods
 end

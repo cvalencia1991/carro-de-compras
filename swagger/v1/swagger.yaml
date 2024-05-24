@@ -5,16 +5,39 @@ info:
   version: v1
 paths:
   "/api/v1/products":
-    get:
-      summary: list products
-      responses:
-        '200':
-          description: successful
     post:
-      summary: create product
+      summary: Create Product
+      tags:
+      - Products
+      security:
+      - bearerAuth: []
+      parameters: []
       responses:
-        '200':
-          description: successful
+        '201':
+          description: product created
+        '400':
+          description: Invalid Request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                description:
+                  type: string
+                tipo:
+                  type: string
+                precio:
+                  type: number
+                  format: float
+                stock:
+                  type: integer
+              required:
+              - nombre
+              - tipo
+              - precio
   "/api/v1/users":
     get:
       summary: list users
@@ -58,4 +81,11 @@ servers:
 - url: https://{defaultHost}
   variables:
     defaultHost:
-      default: www.example.com
+      default: localhost:3000
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+security:
+- bearerAuth: []

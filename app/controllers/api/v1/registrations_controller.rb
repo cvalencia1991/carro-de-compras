@@ -6,7 +6,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     if user.save
       cart = user.build_cart
       if cart.save
-        render json: { message: 'Signed up successfully.', user: user.as_json(except: :jti) }, status: :ok
+        render json: { status:201, message: 'Signed up successfully.', user: user.as_json(except: :jti) }, status: 201
       else
         user.destroy
         render json: { message: 'Sign up failed.', errors: cart.errors.full_messages }, status: :unprocessable_entity
