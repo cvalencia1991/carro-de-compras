@@ -64,6 +64,6 @@ gem 'rubocop', '~> 1.63'
 
 gem "devise-jwt", "~> 0.11.0"
 
-gem "warden", "~> 1.2"
-
 gem 'jsonapi-serializer'
+
+gem "dotenv-rails", "~> 3.1"
