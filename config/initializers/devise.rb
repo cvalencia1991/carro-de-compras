@@ -311,6 +311,10 @@ Devise.setup do |config|
   #Setup configuration for the format on devise would be json
   config.navigational_formats = [:json]
 
+  config.warden do |manager|
+    manager.scope_defaults :user, store: false
+  end
+
   #Intiialize JWToekn to the devise
   config.jwt do |jwt|
     jwt.secret = Rails.application.credentials.devise_jwt_secret_key!
