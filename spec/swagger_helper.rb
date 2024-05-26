@@ -1,30 +1,145 @@
-# frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.configure do |config|
-  # Specify a root folder where Swagger JSON files are generated
-  # NOTE: If you're using the rswag-api to serve API descriptions, you'll need
-  # to ensure that it's configured to serve Swagger from the same folder
+  # Specify the root folder where the Swagger JSON files are generated
   config.openapi_root = Rails.root.join('swagger').to_s
 
   # Define one or more Swagger documents and provide global metadata for each one
-  # When you run the 'rswag:specs:swaggerize' rake task, the complete Swagger will
-  # be generated at the provided relative path under openapi_root
-  # By default, the operations defined in spec files are added to the first
-  # document below. You can override this behavior by adding a openapi_spec tag to the
-  # the root example_group in your specs, e.g. describe '...', openapi_spec: 'v2/swagger.json'
   config.openapi_specs = {
-    'v1/swagger.yaml' => {
+    'v1/swagger.json' => {
       openapi: '3.0.1',
       info: {
-        title: 'API V1',
-        version: 'v1'
+        title: 'API V1 Shopping Cart',
+        version: 'v1',
+        descripcion: 'This is Api for Cart Shop commerce',
+        contact: {
+          name: 'API Cart Shop',
+          email: 'cesar4a6z@gmail.com'
+
+        },
+        license: 'MIT',
+        url: ''
       },
-      paths: {},
+      paths: {
+        '/api/v1/products': {
+          get: {
+            summary: 'List all products',
+            tags: ['Products'],
+            responses: {
+              '200': {
+                description: 'List of products',
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: :array,
+                      items: {
+                        '$ref': '#/components/schemas/Product'
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          post: {
+            summary: 'Create a new product',
+            tags: ['Products'],
+            requestBody: {
+              required: true,
+              content: {
+                'application/json': {
+                  schema: {
+                    '$ref': '#/components/schemas/Product'
+                  }
+                }
+              }
+            },
+            responses: {
+              '201': {
+                description: 'Product created'
+              },
+              '422': {
+                description: 'Unprocessable entity'
+              }
+            }
+          }
+        },
+        '/api/v1/sign_up': {
+          post: {
+            summary: 'Creates a user',
+            tags: ['Registration'],
+            requestBody: {
+              required: true,
+              content: {
+                'application/json': {
+                  schema: {
+                    '$ref': '#/components/schemas/SignUp'
+                  }
+                }
+              }
+            },
+            responses: {
+              '201': {
+                description: 'User created',
+                content: {
+                  'application/json': {
+                    schema: {
+                      '$ref': '#/components/schemas/User'
+                    }
+                  }
+                }
+              },
+              '422': {
+                description: 'Unprocessable entity'
+              }
+            }
+          }
+        },
+        '/api/v1/sign_in': {
+          post: {
+            summary: 'Authenticates a user',
+            tags: ['Session'],
+            requestBody: {
+              required: true,
+              content: {
+                'application/json': {
+                  schema: {
+                    '$ref': '#/components/schemas/SignIn'
+                  }
+                }
+              }
+            },
+            responses: {
+              '200': {
+                description: 'User authenticated',
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: :object,
+                      properties: {
+                        status: { type: :integer },
+                        message: { type: :string },
+                        user: {
+                          id: { type: :integer },
+                          email: { type: :string },
+                          created_at: { type: :string }
+                        },
+                        token: { type: :string }
+                      }
+                    }
+                  }
+                }
+              },
+              '401': {
+                description: 'Invalid credentials'
+              }
+            }
+          }
+        }
+      },
       servers: [
         {
-          url: 'https://{defaultHost}',
+          url: 'http://{defaultHost}',
           variables: {
             defaultHost: {
               default: 'localhost:3000'
@@ -32,11 +147,58 @@ RSpec.configure do |config|
           }
         }
       ],
-      securityDefinitions: {
-        bearerAuth: {
-          type: :apiKey,
-          name: 'Authorization',
-          in: :header
+      components: {
+        schemas: {
+          Product: {
+            type: :object,
+            properties: {
+              id: { type: :integer },
+              name: { type: :string },
+              description: { type: :string },
+              price: { type: :number, format: :float }
+            },
+            required: %w[name price]
+          },
+          User: {
+            type: :object,
+            properties: {
+              id: { type: :integer },
+              email: { type: :string },
+              created_at: { type: :string, format: :'date-time' },
+              updated_at: { type: :string, format: :'date-time' }
+            }
+          },
+          SignIn: {
+            type: :object,
+            properties: {
+              email: { type: :string },
+              password: { type: :string }
+            },
+            required: %w[email password]
+          },
+          SignUp: {
+            type: :object,
+            properties: {
+              user: {
+                type: :object,
+                properties: {
+                  name: { type: :string },
+                  email: { type: :string },
+                  password: { type: :string },
+                  password_confirmation: { type: :string }
+                },
+                required: %w[email password]
+              }
+            }
+          }
+        },
+        securitySchemes: {
+          bearerAuth: {
+            type: :http,
+            scheme: :bearer,
+            bearerFormat: :JWT,
+            description: 'Bearer token authentication'
+          }
         }
       },
       security: [
@@ -46,8 +208,5 @@ RSpec.configure do |config|
   }
 
   # Specify the format of the output Swagger file when running 'rswag:specs:swaggerize'.
-  # The openapi_specs configuration option has the filename including format in
-  # the key, this may want to be changed to avoid putting yaml in json files.
-  # Defaults to json. Accepts ':json' and ':yaml'.
-  config.openapi_format = :yaml
+  config.openapi_format = :json
 end
