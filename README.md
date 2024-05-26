@@ -1,9 +1,7 @@
 <div align="center">
-
+  <img src="./app/assets/images/Cart-Shop-Icon.jpg" alt="" />
   <br/>
-
   <h3><b>Car Shop</b></h3>
-
 </div>
 
 
@@ -35,6 +33,8 @@
 **Cart Shop** is a API (application Programming interface) that allows the user to create an shop depends of the products
 and the cart items are stablish.
 
+<img src="./app/assets/images/Database ER diagram (Cart Shoop).png"  alt= "Design Database Structure"/>
+
 ## 🛠 Built With <a name="built-with"></a>
 
 ### Tech Stack <a name="tech-stack"></a>
@@ -61,8 +61,7 @@ and the cart items are stablish.
 - **The user can create the user name and can asses using registration and session access cookie**
 - **the stock must have control of each one units, make no access adding new items when the cart doesn't have stock**
 - **we have two types of items: events and products, the two types must be specific but the attributes must have price, name, thumbnail and description**
-- **make documetation using rswag**
-- **Implement Testing**
+- **make documetation using rswag and Implement Testing**
 - **docker the project**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -85,79 +84,76 @@ To get a local copy up and running, follow these steps.
 
 In order to run this project you need:
 
-<!--
-Example command:
 
 ```sh
- gem install rails
+  ruby version 3.3.1
+  gem install rails
+  docker run hello-world
 ```
- -->
+
 
 ### Setup
 
 Clone this repository to your desired folder:
 
-<!--
-Example commands:
 
 ```sh
   cd my-folder
-  git clone git@github.com:myaccount/my-project.git
+  git clone git@github.com:cvalencia1991/carro-de-compras.git
+
 ```
---->
+
 
 ### Install
 
 Install this project with:
 
-<!--
-Example command:
-
 ```sh
   cd my-project
   gem install
+  bundle install
 ```
---->
 
 ### Usage
 
 To run the project, execute the following command:
 
-<!--
-Example command:
+if you are working without doker you can put this commands on the bash terminal
 
 ```sh
+  bundle install
   rails server
 ```
---->
+
+if you are working on docker you need first put the image and the render the command in the terminal
+
+```sh
+  docker build -t cart-api-1 /path/to/the/project
+  docker run --name api-2 -p 3000:3000 -e RAILS_MASTER_KEY=$(cat config/master.key) -e DEVISE_JWT_SECRET_KEY=your_jwt_secret_key cart-api-1
+```
 
 ### Run tests
 
 To run tests, run the following command:
 
-<!--
-Example command:
 
 ```sh
-  bin/rails test
+  rspec .
 ```
---->
+
 
 ### Deployment
 
 You can deploy this project using:
 
-<!--
-Example:
 
 ```sh
-
+  railway
+  render
 ```
- -->
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- AUTHORS -->
 
 ## 👥 Authors <a name="authors"></a>
 
@@ -173,11 +169,8 @@ Example:
 
 ## 🔭 Future Features <a name="future-features"></a>
 
-> Describe 1 - 3 features you will add to the project.
+- [ ] **Deploy in a front end framework**
 
-- [ ] **[new_feature_1]**
-- [ ] **[new_feature_2]**
-- [ ] **[new_feature_3]**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -185,11 +178,10 @@ Example:
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](../../issues/).
+Feel free to check the [issues page](https://github.com/cvalencia1991/carro-de-compras/issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- SUPPORT -->
 
 ## ⭐️ Show your support <a name="support"></a>
 
@@ -199,7 +191,7 @@ If you like this project please give me start ⭐️
 
 ## ❓ FAQ (OPTIONAL) <a name="faq"></a>
 
-- **Which framework or library could use to deploy the api**
+- **Which framework or library could use to deploy the api in the front end development**
 
   - you can deploy in any framework that you wan't
 
