@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
 # are not: uncommented lines are intended to protect your configuration from
@@ -308,14 +306,14 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
 
-  #Setup configuration for the format on devise would be json
+  # Setup configuration for the format on devise would be json
   config.navigational_formats = [:json]
 
   config.warden do |manager|
     manager.scope_defaults :user, store: false
   end
 
-  #Intiialize JWToekn to the devise
+  # Intiialize JWToekn to the devise
   config.jwt do |jwt|
     jwt.secret = Rails.application.credentials.devise_jwt_secret_key!
 
@@ -328,5 +326,6 @@ Devise.setup do |config|
     ]
     jwt.expiration_time = 1.day.to_i
   end
+  # Implement navigational formats for any browser to interact
   config.navigational_formats = []
 end
