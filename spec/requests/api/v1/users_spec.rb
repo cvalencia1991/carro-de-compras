@@ -1,98 +1,129 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/users', type: :request do
-
   path '/api/v1/users' do
-
-    get('list users') do
+    get 'List All users' do
+      tags 'Users'
+      produces 'application/json'
       response(200, 'successful') do
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          expect(data).to be_an(Array)
         end
-        run_test!
       end
     end
 
     post('create user') do
-      response(200, 'successful') do
+      tags 'Users'
+      consumes 'application/json'
+      parameter name: :user, in: :body, schema: {
+        type: :object,
+        properties: {
+          name: { type: :string },
+          email: { type: :string },
+          password: { type: :string }
+        },
+        required: %w[name email password]
+      }
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
+      response(201, 'user created') do
+        let(:user) { { name: 'John Doe', email: 'john.doe@example.com', password: 'password' } }
+        run_test!
+      end
+
+      response(422, 'unprocessable entity') do
+        let(:user) { { name: 'John Doe' } }
         run_test!
       end
     end
   end
 
   path '/api/v1/users/{id}' do
-    # You'll want to customize the parameter types...
-    parameter name: 'id', in: :path, type: :string, description: 'id'
+    parameter name: 'id', in: :path, type: :integer, description: 'id'
 
     get('show user') do
+      tags 'Users'
+      produces 'application/json'
       response(200, 'successful') do
-        let(:id) { '123' }
+        schema type: :object,
+               properties: {
+                 id: { type: :integer },
+                 name: { type: :string },
+                 email: { type: :string }
+               },
+               required: %w[id name email]
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
+        let(:id) { User.create(name: 'John Doe', email: 'john.doe@example.com', password: 'password').id }
+
+        run_test!
+      end
+
+      response(404, 'not found') do
+        let(:id) { 'invalid' }
         run_test!
       end
     end
 
     patch('update user') do
-      response(200, 'successful') do
-        let(:id) { '123' }
+      tags 'Users'
+      consumes 'application/json'
+      parameter name: :user, in: :body, schema: {
+        type: :object,
+        properties: {
+          name: { type: :string },
+          email: { type: :string },
+          password: { type: :string }
+        }
+      }
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
+      response(200, 'user updated') do
+        let(:id) { User.create(name: 'John Doe', email: 'john.doe@example.com', password: 'password').id }
+        let(:user) { { name: 'Jane Doe' } }
+        run_test!
+      end
+
+      response(422, 'unprocessable entity') do
+        let(:id) { User.create(name: 'John Doe', email: 'john.doe@example.com', password: 'password').id }
+        let(:user) { { email: 'invalid' } }
         run_test!
       end
     end
 
     put('update user') do
-      response(200, 'successful') do
-        let(:id) { '123' }
+      tags 'Users'
+      consumes 'application/json'
+      parameter name: :user, in: :body, schema: {
+        type: :object,
+        properties: {
+          name: { type: :string },
+          email: { type: :string },
+          password: { type: :string }
+        },
+        required: %w[name email password]
+      }
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
+      response(200, 'user updated') do
+        let(:id) { User.create(name: 'John Doe', email: 'john.doe@example.com', password: 'password').id }
+        let(:user) { { name: 'Jane Doe', email: 'jane.doe@example.com', password: 'newpassword' } }
+        run_test!
+      end
+
+      response(422, 'unprocessable entity') do
+        let(:id) { User.create(name: 'John Doe', email: 'john.doe@example.com', password: 'password').id }
+        let(:user) { { email: 'invalid' } }
         run_test!
       end
     end
 
     delete('delete user') do
-      response(200, 'successful') do
-        let(:id) { '123' }
+      tags 'Users'
+      response(204, 'no content') do
+        let(:id) { User.create(name: 'John Doe', email: 'john.doe@example.com', password: 'password').id }
+        run_test!
+      end
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
+      response(404, 'not found') do
+        let(:id) { 'invalid' }
         run_test!
       end
     end
