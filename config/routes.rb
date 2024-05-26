@@ -1,9 +1,8 @@
 Rails.application.routes.draw do
+  #Create documentation for the API using Rswag gem
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
   devise_for :users
-
-
 
   # set Configuration to development the graphQl
   mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: 'graphql#execute' if Rails.env.development?
@@ -17,9 +16,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :cartitem, only: %i[create update destroy]
       resources :users
-      resources :products, only: [:create, :index]
-      resources :current_user, only:[:index]
-
+      resources :products, only: %i[create index]
+      resources :current_user, only: [:index]
+      resources :carts, only: %i[show update destroy]
+      #make this scope to create the sign_up and sign_in inside of the api
       devise_scope :user do
         post 'sign_in', to: 'sessions#create'
         post 'sign_up', to: 'registrations#create'
