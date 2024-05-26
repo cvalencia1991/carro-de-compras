@@ -1,39 +1,37 @@
 FROM ruby:3.3.1
 
 ENV RUBY_VERSION 3.3.1
-ENV APP_HOME /app
-WORKDIR $APP_HOME
 
+# Run all dependencies in ubuntu
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev \
+    git \
+    bash \
+    libxml2-dev \
+    libxslt-dev \
+    tzdata \
+    openssl
 
-# Update / Install the dependencies for start the container
-RUN apk update && apk add build-base postgresql-dev \
-    && apt-get update -qq \
-     && apt-get install -y build-essential libpq-dev
+# Throw errors if Gemfile has been modified since Gemfile.lock
+RUN bundle config --global frozen 1
 
-# Install dependencies for the our application
-RUN apk --no-cache update \
-    && apk --no-cache add libxml2 libxslt \
-    && apk --no-cache add libc6-compat \
-    && gem update --system 3.4.12 \
-    && gem install nokogiri -- --use-system-libraries \
-    && apk add git \
-    && apk add postgresql-contrib
+# Set the working directory
+WORKDIR /app
 
-# For sending the logs to the docker logs manager.
-RUN ln -sf /dev/stdout/ /log \
-&& ln -sf /dev/stderr/ /log
+# search gem files
+COPY Gemfile Gemfile.lock ./
 
-# Install rails for processeing the rest of the commands
-RUN gem install rails
-
-# Copy the files from the host to the container
-COPY . $APP_HOME
-
-# install the gems from the Gemfile its a separated layer to prevent rebuild the gems
-# when the code changes or the Gemfile.lock changes
+# Install gems
 RUN bundle install
 
-# This are the ports exposed by the container
+# Copy the rest of the application code
+COPY . .
+
+# Expose port 3000 to the outside world
 EXPOSE 3000
 
-CMD ["rails", "server", "-b", "0.0.0.0"]
+# Set the main script to run when the container starts
+ENTRYPOINT ["bin/rails"]
+
+# Default command to run the Rails server
+# Remember it runs the server but not the port depend of the command of docker that handle it the localport
+CMD [ "server","-b", "0.0.0.0"]
