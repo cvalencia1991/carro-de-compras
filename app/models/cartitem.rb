@@ -1,6 +1,6 @@
 class CartItem < ApplicationRecord
   belongs_to :cart
-  belongs_to :product
+  has_many :products
 
   validates :quantity, numericality: { only_integer: true, greater_than: 0 }
   validate :product_in_stock
@@ -10,9 +10,12 @@ class CartItem < ApplicationRecord
 
   private
 
+  def subtotal
+    quantity * product.price
+  end
+
   def product_in_stock
     return unless quantity > product.stock
-
     errors.add(:quantity, 'is greater than available stock')
   end
 
