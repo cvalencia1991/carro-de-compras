@@ -1,64 +1,39 @@
-# syntax = docker/dockerfile:1
+FROM ruby:3.3.1
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.3.1
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
-
-# Rails app lives here
-WORKDIR /rails
-
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+ENV RUBY_VERSION 3.3.1
+ENV APP_HOME /app
+WORKDIR $APP_HOME
 
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
+# Update / Install the dependencies for start the container
+RUN apk update && apk add build-base postgresql-dev \
+    && apt-get update -qq \
+     && apt-get install -y build-essential libpq-dev
 
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config
+# Install dependencies for the our application
+RUN apk --no-cache update \
+    && apk --no-cache add libxml2 libxslt \
+    && apk --no-cache add libc6-compat \
+    && gem update --system 3.4.12 \
+    && gem install nokogiri -- --use-system-libraries \
+    && apk add git \
+    && apk add postgresql-contrib
 
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+# For sending the logs to the docker logs manager.
+RUN ln -sf /dev/stdout/ /log \
+&& ln -sf /dev/stderr/ /log
 
-# Copy application code
-COPY . .
+# Install rails for processeing the rest of the commands
+RUN gem install rails
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# Copy the files from the host to the container
+COPY . $APP_HOME
 
-# Adjust binfiles to be executable on Linux
-RUN chmod +x bin/* && \
-    sed -i "s/\r$//g" bin/* && \
-    sed -i 's/ruby\.exe$/ruby/' bin/*
+# install the gems from the Gemfile its a separated layer to prevent rebuild the gems
+# when the code changes or the Gemfile.lock changes
+RUN bundle install
 
-
-# Final stage for app image
-FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Copy built artifacts: gems, application
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
-
-# Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER rails:rails
-
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-# Start the server by default, this can be overwritten at runtime
+# This are the ports exposed by the container
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+
+CMD ["rails", "server", "-b", "0.0.0.0"]
