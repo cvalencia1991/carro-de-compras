@@ -21,7 +21,7 @@ module Types
     # They will be entry points for queries on your schema.
 
     # Query all the users for the cart shop
-    field :users, [Types::UserType], null: true, description: "Fetches all the users"
+    field :users, [Types::UserType], null: true, description: 'Fetches all the users'
     def users
       User.all
     end
