@@ -12,7 +12,7 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = 'd21fec4b4e91bb19fc02ca6626ebbfac1d0f9f10eb58a9363689e15f838b0b4182e4387302c84b88954504ec3f1589edf18e9b9bc850b402a1c4447950d2e058'
+  # config.secret_key = 'your_scret_key'
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -124,7 +124,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = 'dd853e9a8d307cfdc203df79bb9623afc0000a0e438e5f3d4892b7190aea2269057949aaf7e1eb7420c3da6d2aa39e64a72270132be4f7c6d20b087607e22c9e'
+  # config.pepper = 'your_secret_hashed_password'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -315,7 +315,7 @@ Devise.setup do |config|
 
   # Intiialize JWToekn to the devise
   config.jwt do |jwt|
-    jwt.secret = Rails.application.credentials.devise_jwt_secret_key!
+    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY'] || Rails.application.credentials.devise_jwt_secret_key!
 
     jwt.dispatch_requests = [
       ['POST', %r{^/api/v1/sign_in$}]
