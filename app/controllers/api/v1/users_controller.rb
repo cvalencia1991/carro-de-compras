@@ -2,51 +2,59 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users
   def index
     users = User.all
-    render json: { status: 200, users: }, status: :ok
+    render json: { status: 200, users: users }, status: :ok
   end
 
   # GET /api/v1/users/:id
   def show
-    user = User.find(params[:id])
-    render json: { status: 200, user: }, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'User not found' }, status: :not_found
+    user = User.find_by(id: params[:id])
+    if user
+      render json: { status: 200, user: user }, status: :ok
+    else
+      render json: { status: 404, error: 'User not found' }, status: :not_found
+    end
   end
 
   # POST /api/v1/users
   def create
     user = User.new(user_params)
     if user.save
-      render json: { status: 201, user: }, status: :created
+      render json: { status: 201, user: user }, status: :created
     else
-      render json: user.errors, status: :unprocessable_entity
+      render json: { errors: user.errors }, status: :unprocessable_entity
     end
   end
 
   # PATCH /api/v1/users/:id
   def update
-    user = User.find(params[:id])
-    if user.update(user_params)
-      render json: { status: 200, user: }, status: :ok
+    user = User.find_by(id: params[:id])
+    if user
+      if user.update(user_params)
+        render json: { status: 200, user: user }, status: :ok
+      else
+        render json: { errors: user.errors }, status: :unprocessable_entity
+      end
     else
-      render json: user.errors, status: :unprocessable_entity
+      render json: { error: 'User not found' }, status: :not_found
     end
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'User not found' }, status: :not_found
   end
 
   # DELETE /api/v1/users/:id
   def destroy
-    user = User.find(params[:id])
-    user.destroy
-    render json: { message: 'User deleted successfully' }, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'User not found' }, status: :not_found
+    user = User.find_by(id: params[:id])
+    if user
+      user.destroy
+      render json: { status: 200, message: 'User deleted successfully' }, status: :ok
+    else
+      render json: { error: 'User not found' }, status: :not_found
+    end
   end
 
   private
 
+  # Require parameters when sending to the API
   def user_params
-    params.require(:user).permit(:email, :password, :name) # Adjust permitted params as needed
+    params.require(:user).permit(:email, :password, :name)
   end
 end
+
