@@ -1,16 +1,17 @@
-version: '3'
+version: '3.9'
 services:
   db:
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+    ports:
+    - "5432:5432"
   web:
     build: .
-    command: bundle exec rails s -b '0.0.0.0'
-    volumes:
-      - '.:/app'
     ports:
-      - '3000:3000'
+    - '3000:3000'
+    volumes:
+      - .:/app
     depends_on:
       - db

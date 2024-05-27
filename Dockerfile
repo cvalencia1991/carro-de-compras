@@ -2,17 +2,17 @@ FROM ruby:3.3.1
 
 ENV RUBY_VERSION 3.3.1
 
-# Run all dependencies in ubuntu
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev \
+# Run Dependencies from Ubuntu
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
     git \
     bash \
     libxml2-dev \
     libxslt-dev \
     tzdata \
-    openssl
-
-# Throw errors if Gemfile has been modified since Gemfile.lock
-RUN bundle config --global frozen 1
+    openssl \
+    --no-install-recommends \
+    && apt-get clean
 
 # Set the working directory
 WORKDIR /app
