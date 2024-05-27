@@ -1,7 +1,6 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/carts', type: :request do
-
   path '/api/v1/carts/{id}' do
     get 'Cart' do
       tags 'Carts'
@@ -24,4 +23,3 @@ RSpec.describe 'api/v1/carts', type: :request do
     end
   end
 end
-

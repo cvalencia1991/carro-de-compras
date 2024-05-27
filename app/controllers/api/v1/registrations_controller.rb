@@ -3,6 +3,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
   private
+
   # Response the registration for the user if its correct or not
   def respond_with(resource, _opts = {})
     if resource.persisted?

@@ -4,11 +4,11 @@ RSpec.describe 'Cart Items API', type: :request do
   let(:user) { create(:user) }
   let(:auth_token) do
     post user_session_path, params: { email: user.email, password: user.password }
-    response.headers['Authorization'].split(' ').last
+    response.headers['Authorization'].split.last
   end
-  let(:cart) { create(:cart, user: user) }
+  let(:cart) { create(:cart, user:) }
   let(:product) { create(:product) }
-  let(:cart_item) { create(:cart_item, cart: cart, product: product) }
+  let(:cart_item) { create(:cart_item, cart:, product:) }
 
   before(:each) do
     # Authenticate Before Each Test
@@ -30,19 +30,19 @@ RSpec.describe 'Cart Items API', type: :request do
 
       response '200', 'carts items found' do
         schema type: :object,
-          properties: {
-            status: { type: :integer },
-            cart_item: {
-              type: :object,
-              properties: {
-                id: { type: :integer },
-                cart_id: { type: :integer },
-                product_id: { type: :integer },
-                quantity: { type: :integer }
-              },
-              required: %w[id cart_id product_id quantity]
-            }
-          }
+               properties: {
+                 status: { type: :integer },
+                 cart_item: {
+                   type: :object,
+                   properties: {
+                     id: { type: :integer },
+                     cart_id: { type: :integer },
+                     product_id: { type: :integer },
+                     quantity: { type: :integer }
+                   },
+                   required: %w[id cart_id product_id quantity]
+                 }
+               }
 
         let(:id) { cart_item.id }
         let(:Authorization) { "Bearer #{auth_token}" }
@@ -51,11 +51,11 @@ RSpec.describe 'Cart Items API', type: :request do
 
       response '404', 'cart items not found' do
         schema type: :object,
-          properties: {
-            status: { type: :integer },
-            message: { type: :string }
-          },
-          required: %w[status message]
+               properties: {
+                 status: { type: :integer },
+                 message: { type: :string }
+               },
+               required: %w[status message]
 
         let(:id) { 'invalid' }
         let(:Authorization) { "Bearer #{auth_token}" }
@@ -71,7 +71,7 @@ RSpec.describe 'Cart Items API', type: :request do
       parameter name: :cart_item, in: :body, schema: {
         type: :object,
         properties: {
-          cart_id: {type: :integer},
+          cart_id: { type: :integer },
           quantity: { type: :integer }
         },
         required: [:quantity]

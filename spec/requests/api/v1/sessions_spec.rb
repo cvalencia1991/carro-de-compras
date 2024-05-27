@@ -4,7 +4,7 @@ RSpec.describe 'api/v1/sessions', type: :request do
   let(:user) { create(:user) }
   let(:auth_token) do
     post user_session_path, params: { email: user.email, password: user.password }
-    response.headers['Authorization'].split(' ').last
+    response.headers['Authorization'].split.last
   end
 
   path '/api/v1/sign_in' do

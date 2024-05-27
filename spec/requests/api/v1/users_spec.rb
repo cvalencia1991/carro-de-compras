@@ -1,11 +1,10 @@
 require 'swagger_helper'
 
 RSpec.describe 'Users API', type: :request do
-
   let(:user) { create(:user) }
   let(:auth_token) do
     post user_session_path, params: { email: user.email, password: user.password }
-    response.headers['Authorization'].split(' ').last
+    response.headers['Authorization'].split.last
   end
 
   before(:each) do
@@ -41,7 +40,7 @@ RSpec.describe 'Users API', type: :request do
           name: { type: :string },
           email: { type: :string },
           password: { type: :string },
-          password_confirmation: {type: :string}
+          password_confirmation: { type: :string }
         },
         required: %w[name email password]
       }

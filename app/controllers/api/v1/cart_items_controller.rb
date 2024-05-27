@@ -2,11 +2,11 @@ class Api::V1::CartItemsController < ApplicationController
   before_action :set_cart, only: %i[create update destroy]
 
   def show
-    cart_item = CartItem.find_by(cart_id:params[:id])
+    cart_item = CartItem.find_by(cart_id: params[:id])
     if cart_item
-      render json: { status:200, cart_item: }, status: :ok
+      render json: { status: 200, cart_item: }, status: :ok
     else
-      render json: { status:400, message: "not found"}, status: :not_found
+      render json: { status: 400, message: 'not found' }, status: :not_found
     end
   end
 
@@ -31,7 +31,7 @@ class Api::V1::CartItemsController < ApplicationController
 
     # if cart item Saved Sucessfully
     if cart_item.save
-      render json: { status: 200, message: "Cart item added successfully", cart_item: cart_item }, status: :created
+      render json: { status: 200, message: 'Cart item added successfully', cart_item: }, status: :created
     else
       render json: { status: 404, error: cart_item.errors }, status: :unprocessable_entity
     end
@@ -47,13 +47,13 @@ class Api::V1::CartItemsController < ApplicationController
       render json: { error: 'Quantity cannot be negative.' }, status: :unprocessable_entity
     elsif new_quantity.zero?
       destroy_cart_item(cart_item)
-      render json: { status:200, message: "item delete for the cart"}, status: :ok
+      render json: { status: 200, message: 'item delete for the cart' }, status: :ok
     elsif new_quantity > cart_item.product.stock + cart_item.quantity
       render json: { status: 422, error: 'Not enough stock available.' }, status: :unprocessable_entity
     else
       cart_item.quantity = new_quantity
       if cart_item.save
-        render json: { status: 200, message: "cart item updated successfully", cart_item: cart_item }
+        render json: { status: 200, message: 'cart item updated successfully', cart_item: }
       else
         render json: { status: 404, message: cart_item.errors }, status: :unprocessable_entity
       end
@@ -67,6 +67,7 @@ class Api::V1::CartItemsController < ApplicationController
   end
 
   private
+
   # Set The cart
   def set_cart
     @cart = Cart.find(params[:cart_id])

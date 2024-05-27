@@ -4,7 +4,7 @@ RSpec.describe 'Product API', type: :request do
   let(:user) { create(:user) }
   let(:auth_token) do
     post user_session_path, params: { email: user.email, password: user.password }
-    response.headers['Authorization'].split(' ').last
+    response.headers['Authorization'].split.last
   end
 
   before(:each) do
@@ -87,13 +87,16 @@ RSpec.describe 'Product API', type: :request do
           updated_at: { type: :string, format: :date_time }
         }
         let(:Authorization) { "Bearer #{auth_token}" }
-        let(:product) { { product: { nombre: "Gafas de sol Carey", descripcion: "algo para la vista", tipo: "Producto", precio: 35.99, stock: 10 } } }
+        let(:product) do
+          { product: { nombre: 'Gafas de sol Carey', descripcion: 'algo para la vista', tipo: 'Producto', precio: 35.99,
+                       stock: 10 } }
+        end
         run_test!
       end
 
       response '400', 'bad request' do
         let(:Authorization) { "Bearer #{auth_token}" }
-        let(:product) { { product: { descripcion: "Proteccion visual" } } }
+        let(:product) { { product: { descripcion: 'Proteccion visual' } } }
         run_test!
       end
     end
