@@ -1,6 +1,6 @@
 class CartItemSerializer
   include JSONAPI::Serializer
-  attributes :id, :quantity, :total_price
+  attributes :id, :cart_id, :product_id, :quantity, :subtotal
 
   belongs_to :product
 end
