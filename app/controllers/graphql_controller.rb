@@ -3,13 +3,14 @@ class GraphqlController < ApplicationController
   # This allows for outside API access while preventing CSRF attacks,
   # but you'll have to authenticate your user separately
   # protect_from_forgery with: :null_session
+  skip_before_action :authenticate_user!
 
   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      current_user: current_user,
+      current_user:
     }
     result = CarroDeComprasSchema.execute(query, variables:, context:, operation_name:)
     render json: result
@@ -23,7 +24,7 @@ class GraphqlController < ApplicationController
 
   # Handle authentication for the current User after sign in
   def current_user
-    token = request.headers['Authorization'].to_s.split(' ').last
+    token = request.headers['Authorization'].to_s.split.last
     return nil if token.blank?
 
     decoded_token = JWT.decode(token, Rails.application.credentials.devise_jwt_secret_key)
