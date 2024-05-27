@@ -11,7 +11,6 @@
   - [🛠 Built With](#built-with)
     - [Tech Stack](#tech-stack)
     - [Key Features](#key-features)
-  - [🚀 Live Demo](#live-demo)
 - [💻 Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
@@ -58,7 +57,7 @@ and the cart items are stablish.
 ### Key Features <a name="key-features"></a>
 
 - **When an Item is added to the Car, The system must update the item, but if reduce the item to 0, must delete the item in the car shop**
-- **The user can create the user name and can asses using registration and session access cookie**
+- **The user can create the user name and can asses using registration and barer token**
 - **the stock must have control of each one units, make no access adding new items when the cart doesn't have stock**
 - **we have two types of items: events and products, the two types must be specific but the attributes must have price, name, thumbnail and description**
 - **make documetation using rswag and Implement Testing**
@@ -66,13 +65,6 @@ and the cart items are stablish.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-## 🚀 Live Demo <a name="live-demo"></a>
-
-
-- [Live Demo Link](https://google.com)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## 💻 Getting Started <a name="getting-started"></a>
@@ -131,27 +123,29 @@ if you are working on docker you need first put the image and the render the com
   docker build -t cart-api-1 /path/to/the/project
   docker run --name api-2 -p 3000:3000 -e RAILS_MASTER_KEY=$(cat config/master.key) -e DEVISE_JWT_SECRET_KEY=your_jwt_secret_key cart-api-1
 ```
+when the Master key is inside the crendetials
+
+if you want to work in diffrents enviorments you can use the next command
+```sh
+  docker compose up
+```
 
 ### Run tests
 
 To run tests, run the following command:
 
-
 ```sh
   rspec .
 ```
-
 
 ### Deployment
 
 You can deploy this project using:
 
-
 ```sh
   railway
   render
 ```
-
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
