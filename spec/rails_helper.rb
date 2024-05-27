@@ -32,8 +32,10 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 
+
 # reload any files that get support file
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -74,9 +76,11 @@ RSpec.configure do |config|
 
   config.infer_spec_type_from_file_location!
 
+
   config.filter_rails_from_backtrace!
   config.include Devise::Test::IntegrationHelpers, type: :controller
   config.include Warden::Test::Helpers
   config.include FactoryBot::Syntax::Methods
   config.include DeviseRequestSpecHelpers, type: :request
+  config.include AuthenticationHelper, type: :request
 end

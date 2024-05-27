@@ -171,9 +171,14 @@ RSpec.configure do |config|
           SignIn: {
             type: :object,
             properties: {
+              User: {
+              type: :object,
+              properties: {
               email: { type: :string },
               password: { type: :string }
-            },
+              }
+            }
+          },
             required: %w[email password]
           },
           SignUp: {
@@ -190,6 +195,21 @@ RSpec.configure do |config|
                 required: %w[email password]
               }
             }
+          },
+          cart: {
+            properties: {
+              id: { type: :integer },
+              },
+            required: %w[id]
+          },
+          Cart_items: {
+              type: :object,
+              properties: {
+                id: { type: :integer },
+                cart_id: { type: :integer },
+                quantity: { type: :integer },
+              },
+            required: %w[cart_id quantity]
           }
         },
         securitySchemes: {
