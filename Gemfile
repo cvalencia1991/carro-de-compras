@@ -54,18 +54,26 @@ group :development do
   gem 'graphiql-rails'
 end
 
+# Implementacion de graphql gem
 gem 'graphql', '~> 2.3'
 
+# Adding to render UI in the browser the grapql UI
 gem 'sprockets-rails', '~> 3.4'
 
+# Adding gem to access and registration
 gem 'devise', '~> 4.9'
 
+# Lintering and strucutre of ruby files
 gem 'rubocop', '~> 1.63'
 
+# Make tokens using access
 gem 'devise-jwt', '~> 0.11.0'
 
+# Implement Mocking access users to make testing
 gem 'warden', '~> 1.2'
 
+# serialize outputs json strucutre of class
 gem 'jsonapi-serializer'
 
+# Implement enviorment variables in the rails File
 gem 'dotenv-rails', '~> 3.1'

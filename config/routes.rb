@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   # set Configuration to development the graphQl
   mount GraphiQL::Rails::Engine, at: '/api/v1/graphiql', graphql_path: 'graphql#execute' if Rails.env.development?
-
+  post '/graphql', to: 'graphql#execute'
 
   # the health stablish to test if the server is up
   get 'up' => 'rails/health#show', as: :rails_health_check
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       resources :current_user, only: %i[index]
       resources :carts, only: %i[show update destroy]
       # make this scope to create the sign_up and sign_in inside of the api
-      post '/graphql', to: 'graphql#execute'
+
       devise_scope :user do
         post 'sign_in', to: 'sessions#create'
         post 'sign_up', to: 'registrations#create'
