@@ -1,11 +1,11 @@
 class Api::V1::SessionsController < Devise::SessionsController
   respond_to :json
   skip_before_action :authenticate_user!, only: [:create]
-  # Create Sission
+  # Create Session
   def create
     user_params = params.require(:user).permit(:email, :password)
     user = User.find_by(email: user_params[:email])
-    # If User is Valid logged in Sucessfully
+    # If User is Valid logged in Successfully
     if user&.valid_password?(user_params[:password])
       sign_in(user)
       render json: {

@@ -60,7 +60,7 @@ and the cart items are stablish.
 - **The user can create the user name and can asses using registration and barer token**
 - **the stock must have control of each one units, make no access adding new items when the cart doesn't have stock**
 - **we have two types of items: events and products, the two types must be specific but the attributes must have price, name, thumbnail and description**
-- **make documetation using rswag and Implement Testing**
+- **make documentation using Rswag and Implement Testing**
 - **docker the project**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -110,7 +110,7 @@ Install this project with:
 
 To run the project, execute the following command:
 
-if you are working without doker you can put this commands on the bash terminal
+if you are working without docker you can put this commands on the bash terminal
 
 ```sh
   bundle install
@@ -123,9 +123,9 @@ if you are working on docker you need first put the image and the render the com
   docker build -t cart-api-1 /path/to/the/project
   docker run --name api-2 -p 3000:3000 -e RAILS_MASTER_KEY=$(cat config/master.key) -e DEVISE_JWT_SECRET_KEY=your_jwt_secret_key cart-api-1
 ```
-when the Master key is inside the crendetials
+when the Master key is inside the credentials
 
-if you want to work in diffrents enviorments you can use the next command
+if you want to work in different environments you can use the next command
 ```sh
   docker compose up
 ```
@@ -185,9 +185,9 @@ If you like this project please give me start ⭐️
 
 ## ❓ FAQ (OPTIONAL) <a name="faq"></a>
 
-- **Which framework or library could use to deploy the api in the front end development**
+- **Which framework or library could use to deploy the API in the front end development**
 
-  - you can deploy in any framework that you wan't
+  - you can deploy in any framework that you want
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
